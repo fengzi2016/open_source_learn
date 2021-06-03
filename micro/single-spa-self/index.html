@@ -1,0 +1,22 @@
+<html>
+
+<body>
+    <script type="module" src="single-spa-config.js"></script>
+
+</body>
+<button onclick="changeToApp1()">
+    跳转app1
+</button>
+<button onclick="changeToApp2()">
+    跳转app2
+</button>
+<script>
+    function changeToApp1() {
+        history.pushState(null, 'app1', "/app1")
+    }
+    function changeToApp2() {
+        history.pushState(null, 'app2', "/app2")
+    }
+</script>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+
+<body>
+    <script src="./index.js" type="module"></script>
+    <script type="module">
+        import importHTML from './index.js'
+        importHTML('./template.html').then(res => {
+            console.log(res);
+            res.execScripts().then(exports => {
+                console.log(exports);
+            });
+        });
+
+    </script>
+</body>
+
+</html>
