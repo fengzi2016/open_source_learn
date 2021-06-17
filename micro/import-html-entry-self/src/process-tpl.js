@@ -61,10 +61,9 @@ export default function processTpl(tpl, baseURI) {
     const styles = [];
     let entry = null;
     const moduleSupport = isModuleScriptSupported();
-    console.log("tpl", tpl);
 
+    console.log("原始html文件：", tpl);
     const template = tpl
-
         /*
         remove html comment first
         */

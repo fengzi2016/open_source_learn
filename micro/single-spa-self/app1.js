@@ -16,8 +16,8 @@ export function mount(props) {
             // 在这里通常使用框架将ui组件挂载到dom。请参阅https://single-spa.js.org/docs/ecosystem.html。
             domEl.textContent = 'App 1 is mounted!';
             // 污染
-            // window.app1 = 'app1'
-            // document.body.style = "color: red";
+            window.app1 = 'app1'
+            document.body.style = "color: red";
         });
 }
 export function unmount(props) {

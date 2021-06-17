@@ -76,19 +76,24 @@ function readResAsString(response, autoDetectCharset) {
         }));
 }
 
+/** T: start 可以先看看a.js， b.js 以及 index.html */
 export default function importHTML(url, opts = {}) {
     let fetch = defaultFetch;
     /** 是否开启自动检测， 从用户配置里拿*/
     let autoDecodeResponse = false;
     let getPublicPath = defaultGetPublicPath;
     let getTemplate = defaultGetTemplate;
+    /** 缓存资源 */
     return embedHTMLCache[url] || (embedHTMLCache[url] = fetch(url).then(response => {
+        /** T: 请求目标 */
         console.log('response', response);
         return readResAsString(response, autoDecodeResponse);
     })).then(html => {
         const assetPublicPath = getPublicPath(url);
+        /** T: processTpl */
         const { template, scripts, entry, styles } = processTpl(getTemplate(html), assetPublicPath);
-        console.log("template", template, scripts, entry, styles);
+        /** T: processTpl result */
+        console.log("processTpl 解析结果", template, scripts, entry, styles);
         // 将link标签转化为style
         return getEmbedHTML(template, styles, { fetch }).then(embedHTML => ({
             template: embedHTML,
@@ -99,7 +104,7 @@ export default function importHTML(url, opts = {}) {
                 if (!scripts.length) {
                     return Promise.resolve();
                 }
-                /** 执行script代码，并且挂在window proxy由entry文件执行后增加的属性上 */
+                /** T: execScripts 执行script代码，并且挂在window proxy由entry文件执行后增加的属性上 */
                 return execScripts(entry, scripts, proxy, {
                     fetch,
                     strictGlobal,
@@ -265,23 +270,24 @@ function execScripts(entry, scripts, proxy = window, opts = {}) {
 
             const geval = (scriptSrc, inlineScript) => {
                 const rawCode = beforeExec(inlineScript, scriptSrc) || inlineScript;
-                /** 绑定当前的window proxy */
+                /** T: 绑定当前的window proxy */
                 const code = getExecutableScript(scriptSrc, rawCode, proxy, strictGlobal);
-                console.log("code", code);
+                console.log("getExecutableScript  code", code);
                 (0, eval)(code);
 
                 afterExec(inlineScript, scriptSrc);
             };
 
             function exec(scriptSrc, inlineScript, resolve) {
-
+                /** T: 普通文件直接执行、入口文件需要记录和返回值 */
                 if (scriptSrc === entry) {
                     noteGlobalProps(strictGlobal ? proxy : window);
 
                     try {
                         // bind window.proxy to change `this` reference in script
                         geval(scriptSrc, inlineScript);
-                        // console.log("exports", getGlobalProp(strictGlobal ? proxy : window))
+                        /** T: 入口文件最后添加的属性挂载在window上 */
+                        console.log("getGlobalProp exports", getGlobalProp(strictGlobal ? proxy : window))
                         const exports = proxy[getGlobalProp(strictGlobal ? proxy : window)] || {};
                         resolve(exports);
                     } catch (e) {
@@ -311,6 +317,7 @@ function execScripts(entry, scripts, proxy = window, opts = {}) {
 
             }
 
+            /** T: 按顺序执行脚本、递归 */
             function schedule(i, resolvePromise) {
 
                 if (i < scripts.length) {
