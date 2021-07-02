@@ -4,6 +4,7 @@ const FALSE = { type: "bool", value: false };
 const PRECEDENCE = {
     "为": 1,
     "等于": 1.5,
+    "小于": 1.5,
     "或": 2,
     "并": 3,
     "加": 10, "减": 10,

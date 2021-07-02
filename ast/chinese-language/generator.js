@@ -45,6 +45,7 @@ function make_js(exp) {
             case '除': return '/';
             case '余': return '%';
             case '等于': return '==';
+            case '小于': return '<';
         }
     }
 
@@ -78,7 +79,7 @@ function make_js(exp) {
             },
             args: [exp.vars[0].def || FALSE]
         };
-        console.log('iife', iife);
+        console.log('iife', JSON.stringify(iife));
         return "(" + js(iife) + ")";
     }
 

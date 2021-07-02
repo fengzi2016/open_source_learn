@@ -71,7 +71,7 @@ function TokenStream(input) {
         return is_id_start(ch) || '?!-<>=123456789'.indexOf(ch) >= 0;
     }
     function is_op_char(ch) {
-        return '加减乘除为并或余等于'.indexOf(ch) >= 0;
+        return '加减乘除为并或余等于小'.indexOf(ch) >= 0;
     }
     function is_punc(ch) {
         return "，：（）「」【】；".indexOf(ch) >= 0;
